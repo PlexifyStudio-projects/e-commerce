@@ -8,7 +8,7 @@ const srcPath = path.resolve(__dirname, './src');
 
 export default defineConfig({
   plugins: [react()],
-  base: '/e-commerse/',
+  base: '/e-commerce/',
   resolve: {
     alias: {
       '@': srcPath,
