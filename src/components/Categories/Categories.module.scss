@@ -1,0 +1,488 @@
+// ============================================================
+// Categories — Premium Sliding Puzzle Grid
+// ============================================================
+
+.section {
+  position: relative;
+  z-index: 2;
+  padding: $space-16 0 $space-24;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba($color-accent, 0.02) 20%,
+    rgba($color-accent, 0.04) 50%,
+    rgba($color-accent, 0.02) 80%,
+    transparent 100%
+  );
+  overflow: hidden;
+
+  // Ambient glow effect behind the grid
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 70%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba($color-accent, 0.08) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Floating orbs decoration
+  &::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 5%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(
+      circle,
+      rgba($color-accent, 0.1) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: floatOrb 15s ease-in-out infinite;
+    pointer-events: none;
+  }
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  25% { transform: translate(-30px, 20px) scale(1.1); opacity: 0.7; }
+  50% { transform: translate(-20px, -30px) scale(0.9); opacity: 0.6; }
+  75% { transform: translate(20px, -10px) scale(1.05); opacity: 0.8; }
+}
+
+.container {
+  @include container;
+  @include flex-column;
+  gap: $space-12;
+  position: relative;
+  z-index: 1;
+}
+
+// ---- Header ----
+.header {
+  text-align: center;
+  @include flex-column;
+  align-items: center;
+  gap: $space-4;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: $color-accent;
+  background: linear-gradient(
+    135deg,
+    rgba($color-accent, 0.15) 0%,
+    rgba($color-accent, 0.05) 100%
+  );
+  padding: $space-2 $space-5;
+  border-radius: $border-radius-full;
+  border: 1px solid rgba($color-accent, 0.25);
+  box-shadow:
+    0 0 20px rgba($color-accent, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba($color-accent, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+  50% { box-shadow: 0 0 30px rgba($color-accent, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+}
+
+.title {
+  @include heading($font-size-4xl, $font-weight-black);
+  color: $color-primary;
+  position: relative;
+
+  // Gradient text effect
+  background: linear-gradient(
+    135deg,
+    $color-primary 0%,
+    $color-primary 40%,
+    $color-accent 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  @include respond-to(md) {
+    font-size: $font-size-5xl;
+  }
+}
+
+.subtitle {
+  font-size: $font-size-md;
+  color: $color-gray-500;
+  max-width: 520px;
+  line-height: $line-height-relaxed;
+
+  @include respond-to(md) {
+    font-size: $font-size-lg;
+  }
+}
+
+// ---- Grid Layout ----
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 220px repeat(3, 160px);
+  gap: $space-4;
+  position: relative;
+
+  @include respond-to(md) {
+    grid-template-rows: 260px repeat(3, 170px);
+    gap: $space-5;
+  }
+
+  @include respond-to(lg) {
+    grid-template-rows: 280px repeat(3, 180px);
+    gap: $space-6;
+  }
+
+  // Grid ambient glow
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(
+      ellipse at 30% 20%,
+      rgba(#4A7BF7, 0.1) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+// ---- Category Card ----
+.card {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  border-radius: $border-radius-2xl;
+  text-decoration: none;
+  cursor: pointer;
+  background: $color-surface;
+  will-change: transform;
+  z-index: 1;
+
+  // Glassmorphism border
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 24px -4px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+
+  // Animated border gradient
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 40%,
+      transparent 60%,
+      rgba(var(--cat-accent-rgb, 74, 123, 247), 0.3) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  // Shine effect on hover
+  &::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 60%;
+    height: 200%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    transform: rotate(25deg);
+    transition: all 0.7s ease;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: transparent;
+    box-shadow:
+      0 20px 50px -10px rgba(0, 0, 0, 0.25),
+      0 0 40px -10px var(--cat-accent, $color-accent),
+      0 0 0 1px var(--cat-accent, $color-accent);
+
+    &::before {
+      opacity: 1;
+    }
+
+    &::after {
+      left: 150%;
+      top: -50%;
+    }
+
+    .cardImage {
+      transform: scale(1.12);
+      filter: brightness(1.1) saturate(1.1);
+    }
+
+    .cardGlow {
+      opacity: 0.7;
+    }
+
+    .cardShine {
+      opacity: 1;
+      transform: translateX(100%);
+    }
+
+    .cardArrow {
+      color: var(--cat-accent, $color-accent);
+      gap: $space-2;
+      transform: translateX(4px);
+    }
+
+    .cardIcon {
+      color: var(--cat-accent, $color-accent);
+      filter: drop-shadow(0 0 12px var(--cat-accent, $color-accent));
+      transform: scale(1.1);
+    }
+
+    .cardOverlay {
+      background: linear-gradient(
+        to top,
+        rgba($color-primary, 0.95) 0%,
+        rgba($color-primary, 0.7) 30%,
+        rgba(var(--cat-accent-rgb, 74, 123, 247), 0.2) 70%,
+        rgba(var(--cat-accent-rgb, 74, 123, 247), 0.1) 100%
+      );
+    }
+  }
+
+  // Wide cards (positions 0 and 1)
+  &--wide {
+    .cardName {
+      font-size: $font-size-2xl;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+
+      @include respond-to(md) {
+        font-size: $font-size-3xl;
+      }
+    }
+
+    .cardDesc {
+      display: block;
+      font-size: $font-size-sm;
+      margin-top: $space-2;
+      max-width: 280px;
+
+      @include respond-to(md) {
+        font-size: $font-size-base;
+      }
+    }
+
+    .cardIcon {
+      width: 32px;
+      height: 32px;
+      margin-bottom: $space-4;
+
+      @include respond-to(md) {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    .cardContent {
+      padding: $space-6;
+
+      @include respond-to(md) {
+        padding: $space-8;
+      }
+
+      @include respond-to(lg) {
+        padding: $space-10;
+      }
+    }
+
+    .cardFooter {
+      margin-top: $space-5;
+    }
+
+    .cardCount {
+      font-size: $font-size-sm;
+      padding: $space-1 $space-3;
+      background: rgba(var(--cat-accent-rgb, 74, 123, 247), 0.2);
+      border-radius: $border-radius-full;
+    }
+  }
+}
+
+.cardImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba($color-primary, 0.95) 0%,
+    rgba($color-primary, 0.75) 25%,
+    rgba($color-primary, 0.4) 50%,
+    rgba($color-primary, 0.1) 75%,
+    transparent 100%
+  );
+  z-index: 1;
+  transition: background 0.5s ease;
+}
+
+.cardGlow {
+  position: absolute;
+  bottom: -20%;
+  left: 10%;
+  right: 10%;
+  height: 80%;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    var(--cat-accent, $color-accent) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  filter: blur(50px);
+}
+
+.cardContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: $space-4;
+  width: 100%;
+  color: #fff;
+
+  @include respond-to(md) {
+    padding: $space-5;
+  }
+}
+
+.cardIcon {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: $space-2;
+  transition: all 0.4s ease;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.cardName {
+  font-family: $font-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  margin-bottom: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+  @include respond-to(md) {
+    font-size: $font-size-xl;
+  }
+}
+
+.cardDesc {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: $line-height-relaxed;
+  display: none;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $space-3;
+  padding-top: $space-3;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cardCount {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  color: var(--cat-accent, $color-accent);
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 20px var(--cat-accent, $color-accent);
+}
+
+.cardArrow {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  letter-spacing: 0.02em;
+}
+
+// ---- Empty Cell ----
+.emptyCell {
+  border-radius: $border-radius-2xl;
+  background: linear-gradient(
+    135deg,
+    rgba($color-accent, 0.03) 0%,
+    rgba($color-gray-200, 0.05) 100%
+  );
+  border: 2px dashed rgba($color-accent, 0.15);
+  pointer-events: none;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle pulse animation
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at center,
+      rgba($color-accent, 0.1) 0%,
+      transparent 70%
+    );
+    animation: emptyPulse 3s ease-in-out infinite;
+  }
+}
+
+@keyframes emptyPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 0.6; transform: scale(1); }
+}

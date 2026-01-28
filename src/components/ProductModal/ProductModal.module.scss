@@ -1,0 +1,496 @@
+// ============================================================
+// ProductModal — Apple/Samsung-style Product Detail Modal
+// ============================================================
+
+// ---- Overlay ----
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  background: rgba($color-primary, 0.4);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-6;
+
+  @include respond-below(md) {
+    padding: 0;
+    align-items: flex-end;
+  }
+}
+
+// ---- Modal Shell ----
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 1060px;
+  max-height: 90vh;
+  background: $color-surface-card;
+  border-radius: $border-radius-2xl;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 32px 80px -12px rgba($color-primary, 0.25),
+    0 0 0 1px rgba($color-gray-300, 0.3);
+
+  @include respond-below(md) {
+    max-height: 95vh;
+    border-radius: $border-radius-2xl $border-radius-2xl 0 0;
+  }
+}
+
+// ---- Close Button ----
+.close {
+  position: absolute;
+  top: $space-5;
+  right: $space-5;
+  z-index: 10;
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba($color-surface-card, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba($color-gray-300, 0.4);
+  color: $color-gray-600;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover {
+    background: $color-surface-card;
+    color: $color-primary;
+    box-shadow: $shadow-md;
+    transform: scale(1.05);
+  }
+}
+
+// ---- Scrollable Content ----
+.body {
+  overflow-y: auto;
+  @include custom-scrollbar(5px);
+}
+
+// ---- Layout ----
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @include respond-to(md) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+// ---- Left: Product Showcase ----
+.showcase {
+  position: relative;
+  @include flex-center;
+  padding: $space-12 $space-8;
+  background: $color-surface;
+  overflow: hidden;
+  min-height: 320px;
+
+  @include respond-to(md) {
+    min-height: 480px;
+    position: sticky;
+    top: 0;
+  }
+}
+
+.showcaseGlow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-glow, $color-accent) 0%, transparent 70%);
+  opacity: 0.15;
+  filter: blur(60px);
+  z-index: 0;
+}
+
+.showcaseRing {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-glow-15, rgba($color-accent, 0.15));
+  z-index: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    border: 1px dashed var(--color-glow-15, rgba($color-accent, 0.1));
+  }
+}
+
+.showcaseImage {
+  position: relative;
+  z-index: 2;
+  width: 260px;
+  height: 300px;
+  object-fit: contain;
+  filter: drop-shadow(0 24px 48px rgba($color-primary, 0.18));
+
+  @include respond-to(md) {
+    width: 300px;
+    height: 340px;
+  }
+}
+
+.showcaseBadge {
+  position: absolute;
+  top: $space-5;
+  left: $space-5;
+  z-index: 3;
+}
+
+.showcaseColorsWrap {
+  position: absolute;
+  bottom: $space-5;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  @include flex-column;
+  align-items: center;
+  gap: $space-2;
+}
+
+.colorLabel {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-gray-700;
+  white-space: nowrap;
+  background: rgba($color-surface-card, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 2px $space-3;
+  border-radius: $border-radius-full;
+  border: 1px solid rgba($color-gray-300, 0.2);
+}
+
+.showcaseColors {
+  display: flex;
+  gap: $space-3;
+  padding: $space-2 $space-4;
+  background: rgba($color-surface-card, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: $border-radius-full;
+  border: 1px solid rgba($color-gray-300, 0.3);
+}
+
+.colorDot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--dot-color);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all $transition-fast;
+  @include flex-center;
+  color: white;
+  flex-shrink: 0;
+
+  &--active {
+    border-color: var(--color-glow, $color-accent);
+    box-shadow: 0 0 0 3px var(--color-glow-20, rgba($color-accent, 0.2));
+  }
+
+  &:hover:not(&--active) {
+    transform: scale(1.15);
+  }
+}
+
+// ---- Right: Details ----
+.details {
+  @include flex-column;
+  padding: $space-8 $space-6;
+  gap: $space-5;
+  overflow-y: auto;
+  @include custom-scrollbar(4px);
+
+  @include respond-to(md) {
+    padding: $space-8;
+  }
+}
+
+.detailsHeader {
+  @include flex-column;
+  gap: $space-2;
+}
+
+.tagline {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--modal-accent, $color-accent);
+}
+
+.title {
+  @include heading($font-size-2xl, $font-weight-bold);
+  color: $color-primary;
+
+  @include respond-to(md) {
+    font-size: $font-size-3xl;
+  }
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.stars {
+  display: flex;
+  gap: 1px;
+  color: #F59E0B;
+}
+
+.ratingValue {
+  font-weight: $font-weight-bold;
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.ratingCount {
+  font-size: $font-size-xs;
+  color: $color-gray-500;
+}
+
+// ---- Pricing ----
+.pricing {
+  display: flex;
+  align-items: baseline;
+  gap: $space-3;
+  flex-wrap: wrap;
+}
+
+.price {
+  font-family: $font-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.originalPrice {
+  font-size: $font-size-lg;
+  color: $color-gray-500;
+  text-decoration: line-through;
+}
+
+.discount {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: #10B981;
+  background: rgba(16, 185, 129, 0.08);
+  padding: $space-1 $space-2;
+  border-radius: $border-radius-md;
+}
+
+// ---- Description ----
+.description {
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+  color: $color-gray-700;
+}
+
+// ---- Divider ----
+.divider {
+  height: 1px;
+  background: rgba($color-gray-300, 0.4);
+  margin: $space-1 0;
+}
+
+// ---- Highlights ----
+.highlightsTitle {
+  font-family: $font-display;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: $color-gray-600;
+  margin-bottom: $space-2;
+}
+
+.highlights {
+  @include flex-column;
+  gap: $space-3;
+}
+
+.highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-3;
+  font-size: $font-size-sm;
+  color: $color-gray-700;
+  line-height: $line-height-normal;
+}
+
+.highlightIcon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  @include flex-center;
+  background: var(--modal-accent-10, rgba($color-accent, 0.1));
+  color: var(--modal-accent, $color-accent);
+  margin-top: 1px;
+}
+
+// ---- Specs ----
+.specsTitle {
+  font-family: $font-display;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: $color-gray-600;
+  margin-bottom: $space-2;
+}
+
+.specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-1;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+}
+
+.spec {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: $space-3;
+  background: $color-surface;
+  border-radius: $border-radius-md;
+
+  &:nth-child(odd) {
+    border-radius: $border-radius-md 0 0 $border-radius-md;
+  }
+  &:nth-child(even) {
+    border-radius: 0 $border-radius-md $border-radius-md 0;
+  }
+}
+
+.specLabel {
+  font-size: 10px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $color-gray-500;
+}
+
+.specValue {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+// ---- Variant Selector ----
+.variants {
+  @include flex-column;
+  gap: $space-2;
+}
+
+.variantsLabel {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $color-gray-600;
+}
+
+.variantOptions {
+  display: flex;
+  gap: $space-2;
+  flex-wrap: wrap;
+}
+
+.variant {
+  padding: $space-2 $space-4;
+  border-radius: $border-radius-lg;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-gray-700;
+  background: $color-surface;
+  border: 1.5px solid rgba($color-gray-300, 0.5);
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    border-color: var(--modal-accent-30, rgba($color-accent, 0.3));
+    color: $color-primary;
+  }
+
+  &--active {
+    color: var(--modal-accent, $color-accent);
+    background: var(--modal-accent-8, rgba($color-accent, 0.08));
+    border-color: var(--modal-accent-30, rgba($color-accent, 0.3));
+    font-weight: $font-weight-semibold;
+  }
+}
+
+// ---- Footer CTA ----
+.footer {
+  padding: $space-5 $space-6;
+  border-top: 1px solid rgba($color-gray-300, 0.3);
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  flex-shrink: 0;
+  background: $color-surface-card;
+
+  @include respond-to(md) {
+    padding: $space-5 $space-8;
+  }
+}
+
+.footerPrice {
+  @include flex-column;
+  gap: 0;
+  margin-right: auto;
+}
+
+.footerPriceLabel {
+  font-size: $font-size-xs;
+  color: $color-gray-500;
+}
+
+.footerPriceValue {
+  font-family: $font-display;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.wishBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: $border-radius-xl;
+  @include flex-center;
+  color: $color-gray-400;
+  background: $color-surface;
+  border: 1.5px solid rgba($color-gray-300, 0.5);
+  cursor: pointer;
+  transition: all $transition-fast;
+  flex-shrink: 0;
+
+  &:hover {
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+
+  &--active {
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+}

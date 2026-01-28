@@ -1,0 +1,44 @@
+@use '../abstracts' as *;
+// ============================================================
+// NexTura — Typography System
+// ============================================================
+
+.heading-1 {
+  @include heading($font-size-5xl);
+
+  @include respond-to(lg) {
+    font-size: $font-size-6xl;
+  }
+}
+
+.heading-2 {
+  @include heading($font-size-3xl);
+
+  @include respond-to(lg) {
+    font-size: $font-size-4xl;
+  }
+}
+
+.heading-3 {
+  @include heading($font-size-2xl);
+
+  @include respond-to(lg) {
+    font-size: $font-size-3xl;
+  }
+}
+
+.heading-4 {
+  @include heading($font-size-xl);
+}
+
+.text-gradient {
+  @include gradient-text;
+}
+
+.text-muted {
+  color: $color-gray-400;
+}
+
+.text-accent {
+  color: $color-accent;
+}

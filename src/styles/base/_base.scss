@@ -1,0 +1,21 @@
+@use '../abstracts' as *;
+// ============================================================
+// NexTura — Base Styles
+// ============================================================
+
+.container {
+  @include container;
+}
+
+.section {
+  padding-block: $space-20;
+
+  @include respond-to(lg) {
+    padding-block: $space-32;
+  }
+}
+
+::selection {
+  background-color: rgba($color-primary, 0.3);
+  color: $color-white;
+}

@@ -1,0 +1,153 @@
+@use 'variables' as *;
+// ============================================================
+// NexTura — Mixins
+// ============================================================
+
+// ---- Responsive Breakpoints ----
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: $bp-sm) { @content; }
+  } @else if $breakpoint == md {
+    @media (min-width: $bp-md) { @content; }
+  } @else if $breakpoint == lg {
+    @media (min-width: $bp-lg) { @content; }
+  } @else if $breakpoint == xl {
+    @media (min-width: $bp-xl) { @content; }
+  } @else if $breakpoint == 2xl {
+    @media (min-width: $bp-2xl) { @content; }
+  }
+}
+
+@mixin respond-below($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: ($bp-sm - 1px)) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: ($bp-md - 1px)) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: ($bp-lg - 1px)) { @content; }
+  } @else if $breakpoint == xl {
+    @media (max-width: ($bp-xl - 1px)) { @content; }
+  }
+}
+
+// ---- Flexbox Shortcuts ----
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// ---- Container ----
+@mixin container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin-inline: auto;
+  padding-inline: $container-padding;
+}
+
+// ---- Typography ----
+@mixin heading($size, $weight: $font-weight-bold) {
+  font-family: $font-display;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height-tight;
+  letter-spacing: -0.02em;
+}
+
+// ---- Glass Morphism ----
+@mixin glass($bg-opacity: 0.1, $blur: 20px, $base: $color-surface-card) {
+  background: rgba($base, $bg-opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+}
+
+// ---- Gradient Text ----
+@mixin gradient-text($from: $color-accent, $to: $color-accent-light) {
+  background: linear-gradient(135deg, $from, $to);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+// ---- Gold Border Accent ----
+@mixin gold-border($opacity: 0.2) {
+  border: 1px solid rgba($color-accent, $opacity);
+}
+
+// ---- Button Base ----
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  padding: $space-3 $space-6;
+  border: none;
+  border-radius: $border-radius-lg;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+  transition: all $transition-base;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+}
+
+// ---- Hover Lift ----
+@mixin hover-lift($distance: -2px) {
+  transition: transform $transition-base, box-shadow $transition-base;
+
+  &:hover {
+    transform: translateY($distance);
+    box-shadow: $shadow-lg;
+  }
+}
+
+// ---- Truncate Text ----
+@mixin truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// ---- Scrollbar Styling ----
+@mixin custom-scrollbar($width: 6px) {
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $color-gray-700;
+    border-radius: $border-radius-full;
+
+    &:hover {
+      background: $color-gray-600;
+    }
+  }
+}

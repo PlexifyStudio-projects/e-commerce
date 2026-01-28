@@ -1,0 +1,77 @@
+// ============================================================
+// AnimatedIcon — Ultra-thin stroke icons with premium hover
+// ============================================================
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+}
+
+.wrapper {
+  position: relative;
+  @include flex-center;
+  flex-direction: column;
+  width: 44px;
+  height: 44px;
+  border-radius: $border-radius-lg;
+  cursor: pointer;
+}
+
+.iconBox {
+  position: relative;
+  z-index: 1;
+  @include flex-center;
+  width: 22px;
+  height: 22px;
+}
+
+.iconInner {
+  @include flex-center;
+  color: $color-gray-600;
+  transition: color $transition-fast;
+
+  &--active {
+    color: $color-accent-dark;
+    filter: drop-shadow(0 0 8px rgba($color-accent, 0.4));
+  }
+}
+
+.glow {
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba($color-accent, 0.1) 0%, transparent 70%);
+  border: 1px solid rgba($color-accent, 0.1);
+  pointer-events: none;
+}
+
+.dash {
+  position: absolute;
+  bottom: 4px;
+  height: 1.5px;
+  background: $color-accent;
+  border-radius: $border-radius-full;
+  pointer-events: none;
+}
+
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  @include flex-center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  background: $color-accent;
+  color: $color-black;
+  font-size: 9px;
+  font-weight: $font-weight-bold;
+  border-radius: $border-radius-full;
+  line-height: 1;
+  z-index: 2;
+}

@@ -1,0 +1,79 @@
+.btn {
+  @include button-base;
+  position: relative;
+  overflow: hidden;
+
+  &__icon {
+    font-size: 1.1em;
+    flex-shrink: 0;
+  }
+
+  // ---- Variants ----
+  &--primary {
+    background: $color-primary;
+    color: $color-white;
+    border: 1px solid rgba($color-primary-dark, 0.2);
+
+    &:hover {
+      background: $color-primary-dark;
+      box-shadow: $shadow-md;
+    }
+  }
+
+  &--secondary {
+    background: rgba($color-primary, 0.06);
+    color: $color-primary;
+    border: 1px solid rgba($color-primary, 0.15);
+
+    &:hover {
+      background: rgba($color-primary, 0.12);
+      border-color: rgba($color-primary, 0.25);
+      color: $color-primary-dark;
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $color-gray-700;
+
+    &:hover {
+      color: $color-accent;
+      background: rgba($color-accent, 0.06);
+    }
+  }
+
+  &--accent {
+    background: $color-accent;
+    color: $color-black;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.02em;
+
+    &:hover {
+      background: $color-accent-light;
+      box-shadow: $shadow-glow;
+    }
+  }
+
+  // ---- Sizes ----
+  &--sm {
+    padding: $space-2 $space-4;
+    font-size: $font-size-xs;
+    border-radius: $border-radius-md;
+  }
+
+  &--md {
+    padding: $space-3 $space-6;
+    font-size: $font-size-sm;
+  }
+
+  &--lg {
+    padding: $space-4 $space-8;
+    font-size: $font-size-base;
+    border-radius: $border-radius-xl;
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+  }
+}

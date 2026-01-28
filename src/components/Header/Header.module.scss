@@ -1,0 +1,276 @@
+// ============================================================
+// Header — Premium Dark Theme
+// ============================================================
+
+// ---- Promo Banner ----
+.promo {
+  background: linear-gradient(90deg, $color-accent-dark, $color-accent, $color-accent-dark);
+  overflow: hidden;
+  position: relative;
+  z-index: $z-header + 1;
+
+  &__inner {
+    @include container;
+    @include flex-center;
+    gap: $space-4;
+    padding-block: $space-2;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-black;
+    text-align: center;
+    letter-spacing: 0.03em;
+
+    @include respond-below(md) {
+      flex-direction: column;
+      gap: $space-1;
+    }
+  }
+
+  &__divider {
+    display: none;
+    width: 1px;
+    height: 12px;
+    background: rgba($color-black, 0.25);
+
+    @include respond-to(md) {
+      display: block;
+    }
+  }
+
+  &__highlight {
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}
+
+// ---- Main Header ----
+.header {
+  position: sticky;
+  top: 0;
+  z-index: $z-header;
+  transition: transform $transition-base, background $transition-base,
+    box-shadow $transition-base, border-color $transition-base;
+  background: rgba($color-surface-card, 0.45);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border-bottom: 1px solid rgba($color-gray-300, 0.3);
+
+  &--scrolled {
+    background: rgba($color-surface-card, 0.5);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border-bottom: 1px solid rgba($color-gray-300, 0.3);
+    box-shadow: 0 4px 24px -4px rgba($color-primary, 0.06);
+  }
+
+  &__inner {
+    @include container;
+    @include flex-between;
+    height: 72px;
+  }
+
+  // ---- Logo ----
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  &__logoMark {
+    @include flex-center;
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, $color-accent, $color-accent-dark);
+    color: $color-black;
+    font-family: $font-display;
+    font-weight: $font-weight-black;
+    font-size: $font-size-lg;
+    border-radius: $border-radius-md;
+    letter-spacing: -0.02em;
+  }
+
+  &__logoText {
+    font-family: $font-display;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    letter-spacing: -0.01em;
+
+    span {
+      @include gradient-text;
+    }
+  }
+
+  // ---- Desktop Nav ----
+  &__nav {
+    display: none;
+    align-items: center;
+    gap: $space-1;
+
+    @include respond-to(lg) {
+      display: flex;
+    }
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-gray-700;
+    text-decoration: none;
+    border-radius: $border-radius-md;
+    transition: color $transition-base;
+    letter-spacing: 0.01em;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &__linkIcon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+  }
+
+  &__linkIconInner {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-gray-500;
+
+    &--active {
+      color: $color-accent-dark;
+      filter: drop-shadow(0 0 6px rgba($color-accent, 0.4));
+    }
+  }
+
+  // ---- Action Icons ----
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+  }
+
+  &__burger {
+    @include flex-center;
+    width: 42px;
+    height: 42px;
+    border-radius: $border-radius-lg;
+    color: $color-gray-700;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-accent-dark;
+    }
+
+    @include respond-to(lg) {
+      display: none;
+    }
+  }
+}
+
+// ---- Search Overlay ----
+.search {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba($color-surface-card, 0.85);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid rgba($color-gray-300, 0.4);
+
+  &__inner {
+    @include container;
+    @include flex-center;
+    gap: $space-4;
+    padding-block: $space-5;
+  }
+
+  &__icon {
+    color: $color-accent;
+    flex-shrink: 0;
+  }
+
+  &__input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: $font-size-md;
+    color: $color-primary;
+    letter-spacing: 0.01em;
+
+    &::placeholder {
+      color: $color-gray-500;
+    }
+  }
+
+  &__close {
+    @include flex-center;
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-md;
+    color: $color-gray-600;
+    transition: color $transition-fast, background $transition-fast;
+
+    &:hover {
+      color: $color-accent-dark;
+      background: rgba($color-accent, 0.1);
+    }
+  }
+}
+
+// ---- Mobile Menu ----
+.mobile {
+  position: fixed;
+  inset: 0;
+  z-index: $z-overlay;
+  background: rgba($color-surface-card, 0.96);
+  backdrop-filter: blur(30px) saturate(1.4);
+  -webkit-backdrop-filter: blur(30px) saturate(1.4);
+  padding-top: 100px;
+
+  &__nav {
+    @include flex-column;
+    @include container;
+    gap: $space-1;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: $space-5;
+    padding: $space-5 $space-4;
+    font-family: $font-display;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+    color: $color-gray-700;
+    text-decoration: none;
+    border-bottom: 1px solid rgba($color-gray-300, 0.4);
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-accent-dark;
+    }
+  }
+
+  &__linkIcon {
+    color: $color-gray-500;
+
+    .mobile__link:hover & {
+      color: $color-accent-dark;
+    }
+  }
+}

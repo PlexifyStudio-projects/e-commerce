@@ -1,0 +1,14 @@
+// ============================================================
+// NexTura — Main Stylesheet Entry Point
+// ============================================================
+// Architecture: Modified 7-1 Pattern
+// ============================================================
+
+// ---- Abstracts (imported globally via vite.config.js) ----
+// @use 'abstracts/variables';
+// @use 'abstracts/mixins';
+
+// ---- Base ----
+@use 'base/reset';
+@use 'base/typography';
+@use 'base/base';

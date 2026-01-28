@@ -1,0 +1,508 @@
+// ============================================================
+// Hero — Ultra Premium with Dynamic Theme Colors
+// ============================================================
+
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: clip;
+  padding-top: 72px;
+  background: transparent;
+
+  // ---- Container ----
+  &__container {
+    @include container;
+    position: relative;
+    z-index: 1;
+    @include flex-column;
+    gap: $space-8;
+    padding-block: $space-8;
+
+    @include respond-to(lg) {
+      padding-block: $space-10;
+    }
+  }
+
+  // ---- Tabs ----
+  &__tabs {
+    display: flex;
+    gap: $space-2;
+    overflow-x: auto;
+    padding-bottom: $space-2;
+    @include custom-scrollbar(4px);
+
+    @include respond-to(md) {
+      justify-content: center;
+      gap: $space-3;
+    }
+  }
+
+  &__tab {
+    position: relative;
+    @include flex-center;
+    gap: $space-2;
+    padding: $space-3 $space-5;
+    border-radius: $border-radius-full;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-gray-600;
+    background: rgba($color-primary, 0.03);
+    border: 1px solid rgba($color-primary, 0.06);
+    white-space: nowrap;
+    transition: all 0.4s ease;
+    overflow: hidden;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+
+    &:hover {
+      color: $color-primary;
+      background: rgba($color-primary, 0.06);
+      border-color: rgba($color-primary, 0.1);
+    }
+
+    &--active {
+      color: var(--tab-accent, $color-accent);
+      background: var(--theme-8, rgba($color-accent, 0.08));
+      border-color: var(--theme-25, rgba($color-accent, 0.25));
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  &__tabIcon {
+    flex-shrink: 0;
+    transition: color 0.4s ease;
+
+    .hero__tab--active & {
+      color: var(--tab-accent, $color-accent);
+    }
+  }
+
+  &__tabLabel {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__tabProgress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--theme-30, $color-accent-dark), var(--theme, $color-accent));
+    border-radius: 0 $border-radius-full $border-radius-full 0;
+  }
+
+  // ---- Content ----
+  &__content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  &__main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-10;
+    width: 100%;
+    align-items: center;
+
+    @include respond-to(lg) {
+      grid-template-columns: 1fr 1fr;
+      gap: $space-12;
+    }
+  }
+
+  // ---- Text & Purchase Flow ----
+  &__text {
+    @include flex-column;
+    gap: $space-4;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    flex-wrap: wrap;
+  }
+
+  // ---- Rating ----
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+  }
+
+  &__stars {
+    display: flex;
+    gap: 1px;
+    color: #F59E0B;
+  }
+
+  &__ratingValue {
+    font-weight: $font-weight-bold;
+    font-size: $font-size-sm;
+    color: $color-primary;
+    margin-left: 2px;
+  }
+
+  &__ratingCount {
+    font-size: $font-size-xs;
+    color: $color-gray-500;
+  }
+
+  // ---- Tagline & Title ----
+  &__tagline {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--theme, $color-accent);
+    transition: color 0.6s ease;
+  }
+
+  &__title {
+    @include heading($font-size-4xl, $font-weight-black);
+    color: $color-primary;
+    letter-spacing: -0.03em;
+    line-height: $line-height-tight;
+
+    @include respond-to(md) {
+      font-size: $font-size-5xl;
+    }
+
+    @include respond-to(lg) {
+      font-size: $font-size-6xl;
+    }
+  }
+
+  &__subtitle {
+    font-size: $font-size-md;
+    color: $color-gray-700;
+    line-height: $line-height-relaxed;
+    max-width: 520px;
+
+    @include respond-to(lg) {
+      font-size: $font-size-lg;
+    }
+  }
+
+  // ---- Color Selector ----
+  &__colors {
+    @include flex-column;
+    gap: $space-2;
+  }
+
+  &__colorsLabel {
+    font-size: $font-size-sm;
+    color: $color-gray-600;
+
+    strong {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  &__colorSwatches {
+    display: flex;
+    gap: $space-2;
+  }
+
+  &__colorSwatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--swatch);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    @include flex-center;
+    color: white;
+    flex-shrink: 0;
+
+    &--active {
+      border-color: var(--theme, $color-accent);
+      box-shadow: 0 0 0 3px var(--theme-25, rgba($color-accent, 0.25));
+    }
+
+    &:hover:not(&--active) {
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  // ---- Variant Selector ----
+  &__variants {
+    @include flex-column;
+    gap: $space-2;
+  }
+
+  &__variantsLabel {
+    font-size: $font-size-sm;
+    color: $color-gray-600;
+  }
+
+  &__variantOptions {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+  }
+
+  &__variant {
+    padding: $space-2 $space-4;
+    border-radius: $border-radius-lg;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-gray-700;
+    background: rgba($color-primary, 0.03);
+    border: 1.5px solid rgba($color-primary, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: var(--theme-30, rgba($color-accent, 0.3));
+      color: $color-primary;
+      background: var(--theme-5, rgba($color-accent, 0.05));
+    }
+
+    &--active {
+      color: var(--theme, $color-accent);
+      background: var(--theme-8, rgba($color-accent, 0.08));
+      border-color: var(--theme-30, rgba($color-accent, 0.3));
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  // ---- Pricing ----
+  &__pricing {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+
+  &__price {
+    font-family: $font-display;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+
+    @include respond-to(lg) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__originalPrice {
+    font-size: $font-size-lg;
+    color: $color-gray-500;
+    text-decoration: line-through;
+  }
+
+  &__stock {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: #10B981;
+    margin-left: $space-2;
+  }
+
+  // ---- CTAs ----
+  &__ctas {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding-top: $space-1;
+  }
+
+  &__wishlist {
+    width: 48px;
+    height: 48px;
+    border-radius: $border-radius-xl;
+    @include flex-center;
+    color: $color-gray-400;
+    background: rgba($color-primary, 0.03);
+    border: 1.5px solid rgba($color-primary, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+
+    &:hover {
+      color: #EF4444;
+      background: rgba(239, 68, 68, 0.06);
+      border-color: rgba(239, 68, 68, 0.2);
+      transform: scale(1.05);
+    }
+
+    &--active {
+      color: #EF4444;
+      background: rgba(239, 68, 68, 0.06);
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+  }
+
+  // ---- Trust Badges ----
+  &__trust {
+    display: flex;
+    gap: $space-5;
+    flex-wrap: wrap;
+    padding-top: $space-1;
+  }
+
+  &__trustItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: $font-size-xs;
+    color: $color-gray-500;
+
+    svg {
+      color: var(--theme, $color-accent);
+      flex-shrink: 0;
+      transition: color 0.6s ease;
+    }
+  }
+
+  // ---- Product Showcase (floating) ----
+  &__visual {
+    position: relative;
+    @include flex-center;
+    perspective: 1200px;
+    transform-style: preserve-3d;
+
+    @include respond-below(lg) {
+      display: none;
+    }
+  }
+
+  &__productGlow {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--theme, $color-accent) 0%, transparent 70%);
+    opacity: 0.18;
+    filter: blur(70px);
+    transition: all 0.8s ease;
+    z-index: 0;
+  }
+
+  &__productRing {
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    border: 1.5px solid var(--theme-15, rgba($color-accent, 0.15));
+    transition: all 0.8s ease;
+    z-index: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -25px;
+      border-radius: 50%;
+      border: 1px dashed var(--theme-10, rgba($color-accent, 0.1));
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      border: 1px solid var(--theme-10, rgba($color-accent, 0.1));
+    }
+  }
+
+  &__productClickable {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.4s ease;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+
+    &:hover .hero__productImage {
+      filter: drop-shadow(0 35px 70px rgba($color-primary, 0.28));
+    }
+  }
+
+  &__productImage {
+    position: relative;
+    width: 300px;
+    height: 340px;
+    object-fit: contain;
+    filter: drop-shadow(0 30px 60px rgba($color-primary, 0.2));
+    transition: filter 0.6s ease;
+  }
+
+  &__productIcon {
+    position: relative;
+    z-index: 2;
+    color: var(--theme, $color-accent);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 40px var(--theme, $color-accent));
+  }
+
+  // ---- Feature Pills ----
+  &__features {
+    position: absolute;
+    inset: -20px;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  &__feature {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px $space-3;
+    font-size: 11px;
+    font-weight: $font-weight-bold;
+    color: $color-gray-800;
+    background: rgba($color-surface-card, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--theme-15, rgba($color-accent, 0.15));
+    border-radius: $border-radius-full;
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba($color-primary, 0.06);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+
+    svg {
+      color: var(--theme, $color-accent);
+      flex-shrink: 0;
+    }
+
+    &:nth-child(1) { top: 8%; right: -5%; }
+    &:nth-child(2) { top: 38%; left: -18%; }
+    &:nth-child(3) { bottom: 28%; right: -8%; }
+    &:nth-child(4) { bottom: 5%; left: -12%; }
+  }
+
+  // ---- Product Reflection ----
+  &__productReflection {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%) scaleY(-0.25) scaleX(0.85);
+    z-index: 1;
+    opacity: 0.06;
+    filter: blur(8px);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%);
+    pointer-events: none;
+
+    img {
+      width: 300px;
+      height: 340px;
+      object-fit: contain;
+    }
+  }
+}

@@ -1,0 +1,249 @@
+// ============================================================
+// HeroBackground — Rich 3D ambient atmosphere
+// ============================================================
+
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+
+  // ---- Base gradient wash ----
+  &__gradient {
+    position: absolute;
+    inset: -30%;
+  }
+
+  // ---- Mesh gradient orbs ----
+  &__orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__orb {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--orb-color) 0%, transparent 70%);
+    opacity: 0.1;
+    filter: blur(90px);
+    transform: translate(-50%, -50%);
+
+    &--cool {
+      background: radial-gradient(circle, rgba($color-secondary-light, 0.6) 0%, transparent 70%);
+      opacity: 0.07;
+    }
+  }
+
+  // ---- Aurora effect ----
+  &__aurora {
+    position: absolute;
+    inset: -50%;
+    background:
+      radial-gradient(ellipse 600px 400px at 20% 30%, var(--aurora-color) 0%, transparent 60%),
+      radial-gradient(ellipse 500px 350px at 70% 60%, var(--aurora-color) 0%, transparent 60%),
+      radial-gradient(ellipse 400px 300px at 50% 80%, var(--aurora-color) 0%, transparent 60%);
+    opacity: 0.15;
+    background-size: 200% 200%;
+    filter: blur(80px);
+  }
+
+  // ---- 3D Perspective grid ----
+  &__gridWrap {
+    position: absolute;
+    inset: 0;
+    perspective: 600px;
+    overflow: hidden;
+  }
+
+  &__grid {
+    position: absolute;
+    left: -20%;
+    right: -20%;
+    bottom: -10%;
+    height: 60%;
+    background-image:
+      linear-gradient(var(--theme-10, rgba($color-accent, 0.1)) 1px, transparent 1px),
+      linear-gradient(90deg, var(--theme-10, rgba($color-accent, 0.1)) 1px, transparent 1px);
+    background-size: 70px 70px;
+    transform: rotateX(55deg);
+    transform-origin: center bottom;
+    mask-image: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 80%);
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 80%);
+  }
+
+  // ---- Orbital ellipses ----
+  &__orbits {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  &__orbit {
+    position: absolute;
+    border: 1px solid var(--theme-10, rgba($color-accent, 0.1));
+    border-radius: 50%;
+    transform-style: preserve-3d;
+    transition: border-color 0.6s ease;
+
+    &:nth-child(1) { transform: rotateX(72deg); }
+    &:nth-child(2) { transform: rotateX(68deg) rotateZ(60deg); }
+    &:nth-child(3) { transform: rotateX(75deg) rotateZ(120deg); }
+  }
+
+  &__orbitDot {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--theme, $color-accent);
+    box-shadow: 0 0 14px 4px var(--theme-50, rgba($color-accent, 0.5));
+    transform: translateX(-50%);
+    transition: background 0.6s ease, box-shadow 0.6s ease;
+  }
+
+  // ---- Floating shapes ----
+  &__shapes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__shape {
+    position: absolute;
+    transform-style: preserve-3d;
+    will-change: transform;
+    color: var(--theme-30, rgba($color-accent, 0.3));
+    transition: color 0.6s ease;
+  }
+
+  // ---- Frosted glass panels ----
+  &__panels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    perspective: 1200px;
+  }
+
+  &__panel {
+    position: absolute;
+    border-radius: $border-radius-lg;
+    background: rgba($color-surface-card, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--theme-8, rgba($color-accent, 0.08));
+    box-shadow: 0 8px 32px rgba($color-primary, 0.04);
+    transform-style: preserve-3d;
+    transition: border-color 0.6s ease;
+  }
+
+  // ---- Particle constellation ----
+  &__particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__particle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--theme, $color-accent);
+    transition: background 0.6s ease;
+  }
+
+  // ---- Spotlight ----
+  &__spotlight {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1000px;
+    height: 700px;
+    background: radial-gradient(
+      ellipse at center,
+      var(--spot-color) 0%,
+      transparent 70%
+    );
+    opacity: 0.1;
+    pointer-events: none;
+  }
+
+  // ---- Diagonal light rays ----
+  &__rays {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  &__ray {
+    position: absolute;
+    top: -20%;
+    width: 2px;
+    height: 140%;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--theme-10, rgba($color-accent, 0.12)) 30%,
+      var(--theme-20, rgba($color-accent, 0.2)) 50%,
+      var(--theme-10, rgba($color-accent, 0.12)) 70%,
+      transparent 100%
+    );
+    transform-origin: top center;
+
+    &:nth-child(1) { left: 25%; transform: rotate(-15deg); }
+    &:nth-child(2) { left: 50%; transform: rotate(0deg); }
+    &:nth-child(3) { left: 75%; transform: rotate(15deg); }
+  }
+
+  // ---- Horizontal light lines ----
+  &__lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--theme-20, rgba($color-accent, 0.2)) 30%,
+      var(--theme-30, rgba($color-accent, 0.35)) 50%,
+      var(--theme-20, rgba($color-accent, 0.2)) 70%,
+      transparent 100%
+    );
+    transform-origin: center;
+  }
+
+  // ---- Noise texture ----
+  &__noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    pointer-events: none;
+  }
+
+  // ---- Vignette ----
+  &__vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 50%,
+      rgba($color-light, 0.7) 100%
+    );
+    pointer-events: none;
+  }
+}

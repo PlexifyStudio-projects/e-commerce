@@ -1,0 +1,617 @@
+// ============================================================
+// Products Page
+// ============================================================
+
+.page {
+  min-height: 100vh;
+  background: $color-surface;
+}
+
+// ---- Top Bar ----
+.topBar {
+  position: sticky;
+  top: 72px;
+  z-index: 10;
+  background: rgba($color-surface-card, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba($color-gray-300, 0.3);
+}
+
+.topBarInner {
+  @include container;
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  padding-block: $space-4;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-gray-600;
+  cursor: pointer;
+  transition: color 0.2s;
+  &:hover { color: $color-accent-dark; }
+}
+
+.pageTitle {
+  font-family: $font-display;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.productCount {
+  margin-left: auto;
+  font-size: $font-size-sm;
+  color: $color-gray-500;
+}
+
+// ---- Layout ----
+.layout {
+  @include container;
+  display: flex;
+  gap: $space-6;
+  padding-block: $space-6;
+}
+
+// ---- Sidebar ----
+.sidebar {
+  display: none;
+  flex-shrink: 0;
+  width: 240px;
+  @include flex-column;
+  gap: $space-5;
+
+  @include respond-to(lg) {
+    display: flex;
+  }
+
+  &--open {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: $z-overlay;
+    width: 100%;
+    max-width: 320px;
+    background: $color-surface-card;
+    padding: $space-6;
+    overflow-y: auto;
+    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.2);
+
+    @include respond-to(lg) {
+      position: static;
+      width: 240px;
+      max-width: none;
+      background: none;
+      padding: 0;
+      box-shadow: none;
+    }
+  }
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: $space-3;
+  border-bottom: 1px solid rgba($color-gray-300, 0.4);
+}
+
+.sidebarClose {
+  margin-left: auto;
+  color: $color-gray-500;
+  cursor: pointer;
+  @include respond-to(lg) { display: none; }
+}
+
+.filterGroup {
+  @include flex-column;
+  gap: 2px;
+}
+
+.filterTitle {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $color-gray-500;
+  margin-bottom: $space-2;
+}
+
+.filterOption {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-3;
+  font-size: $font-size-sm;
+  color: $color-gray-600;
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+
+  &:hover {
+    background: rgba($color-gray-200, 0.5);
+    color: $color-primary;
+  }
+
+  &--active {
+    background: rgba($color-accent, 0.1);
+    color: $color-accent-dark;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.filterCount {
+  margin-left: auto;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $color-gray-400;
+  background: rgba($color-gray-200, 0.5);
+  padding: 2px 8px;
+  border-radius: $border-radius-full;
+  min-width: 24px;
+  text-align: center;
+
+  .filterOption--active & {
+    background: rgba($color-accent, 0.15);
+    color: $color-accent-dark;
+  }
+}
+
+
+// ---- Main ----
+.main {
+  flex: 1;
+  min-width: 0;
+  @include flex-column;
+  gap: $space-5;
+}
+
+// ---- Toolbar ----
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  flex-wrap: wrap;
+}
+
+.filterToggle {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-gray-700;
+  background: rgba($color-surface-card, 0.7);
+  border: 1px solid rgba($color-gray-300, 0.5);
+  border-radius: $border-radius-full;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $color-accent;
+    color: $color-accent-dark;
+  }
+
+  @include respond-to(lg) { display: none; }
+}
+
+.searchBox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  background: rgba($color-surface-card, 0.7);
+  border: 1px solid rgba($color-gray-300, 0.5);
+  border-radius: $border-radius-full;
+  color: $color-gray-500;
+  min-width: 200px;
+
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: $font-size-sm;
+    color: $color-primary;
+    &::placeholder { color: $color-gray-400; }
+  }
+
+  button {
+    color: $color-gray-400;
+    cursor: pointer;
+    &:hover { color: $color-primary; }
+  }
+}
+
+.sortBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  color: $color-gray-500;
+
+  select {
+    appearance: none;
+    padding: $space-2 $space-6 $space-2 $space-3;
+    font-size: $font-size-sm;
+    color: $color-gray-700;
+    background: rgba($color-surface-card, 0.7);
+    border: 1px solid rgba($color-gray-300, 0.5);
+    border-radius: $border-radius-full;
+    cursor: pointer;
+    outline: none;
+
+    &:focus { border-color: $color-accent; }
+  }
+
+  svg {
+    position: absolute;
+    right: $space-3;
+    pointer-events: none;
+  }
+}
+
+// ---- Active Tags ----
+.activeTags {
+  display: flex;
+  gap: $space-2;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-1 $space-3;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-accent-dark;
+  background: rgba($color-accent, 0.1);
+  border: 1px solid rgba($color-accent, 0.25);
+  border-radius: $border-radius-full;
+
+  button {
+    display: flex;
+    color: $color-accent-dark;
+    cursor: pointer;
+    opacity: 0.6;
+    &:hover { opacity: 1; }
+  }
+}
+
+// ---- Product Grid ----
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-4;
+
+  @include respond-to(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to(md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include respond-to(xl) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// ---- Card ----
+.card {
+  @include flex-column;
+  background: rgba($color-surface-card, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: $border-radius-xl;
+  border: 1px solid rgba($color-gray-300, 0.3);
+  overflow: hidden;
+  transition: all 0.4s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px -8px rgba($color-primary, 0.12);
+    border-color: rgba($color-accent, 0.25);
+
+    .cardOverlay { opacity: 1; }
+    .cardWishlist { opacity: 1; transform: translateY(0); }
+  }
+}
+
+.cardImageArea {
+  position: relative;
+  @include flex-center;
+  padding: $space-6 $space-4;
+  min-height: 180px;
+  background: linear-gradient(180deg, rgba($color-surface, 0.4), rgba($color-surface, 0.7));
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+
+  .card:hover & { transform: scale(1.05); }
+}
+
+.cardBadge {
+  position: absolute;
+  top: $space-3;
+  left: $space-3;
+}
+
+.cardWishlist {
+  position: absolute;
+  top: $space-3;
+  right: $space-3;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  @include flex-center;
+  background: rgba($color-surface-card, 0.85);
+  border: 1px solid rgba($color-gray-300, 0.3);
+  color: $color-gray-400;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: all 0.3s ease;
+
+  &:hover { color: #EF4444; }
+  &--active {
+    opacity: 1;
+    transform: translateY(0);
+    color: #EF4444;
+  }
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  @include flex-center;
+  background: rgba($color-primary, 0.04);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.cardViewBtn {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  background: rgba($color-surface-card, 0.9);
+  border-radius: $border-radius-full;
+  border: 1px solid rgba($color-gray-300, 0.4);
+}
+
+.cardInfo {
+  @include flex-column;
+  gap: $space-1;
+  padding: $space-4;
+}
+
+.cardBrand {
+  font-size: 10px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $color-accent-dark;
+}
+
+.cardTitle {
+  font-family: $font-display;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  line-height: $line-height-snug;
+  @include truncate(2);
+}
+
+.cardRating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.cardStar { color: #F59E0B; }
+
+.cardReviews {
+  color: $color-gray-500;
+  font-weight: 400;
+}
+
+.cardPricing {
+  display: flex;
+  align-items: baseline;
+  gap: $space-2;
+  margin-top: $space-1;
+}
+
+.cardPrice {
+  font-family: $font-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.cardOriginal {
+  font-size: $font-size-xs;
+  color: $color-gray-500;
+  text-decoration: line-through;
+}
+
+.cardDiscount {
+  font-size: 10px;
+  font-weight: $font-weight-bold;
+  color: #10B981;
+  background: rgba(16, 185, 129, 0.08);
+  padding: 1px $space-2;
+  border-radius: $border-radius-sm;
+}
+
+.cardCartBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  width: 100%;
+  padding: $space-2;
+  margin-top: $space-2;
+  border-radius: $border-radius-lg;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-surface-card;
+  background: $color-primary;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba($color-primary, 0.25);
+  }
+
+  &--added {
+    background: #10B981;
+    pointer-events: none;
+  }
+}
+
+// ---- Empty State ----
+.empty {
+  @include flex-column;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-16 0;
+  color: $color-gray-400;
+  text-align: center;
+
+  h3 {
+    font-size: $font-size-xl;
+    color: $color-primary;
+  }
+
+  p {
+    font-size: $font-size-sm;
+    color: $color-gray-500;
+  }
+}
+
+// ---- Pagination ----
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  padding: $space-10 0 $space-4;
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-2 $space-4;
+    background: $color-surface-card;
+    border: 1px solid $color-gray-200;
+    border-radius: $border-radius-lg;
+    color: $color-gray-600;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      border-color: $color-accent;
+      color: $color-accent;
+      background: rgba($color-accent, 0.04);
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    span {
+      @media (max-width: $bp-sm) {
+        display: none;
+      }
+    }
+  }
+
+  &__pages {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+  }
+
+  &__page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: $border-radius-md;
+    color: $color-gray-600;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba($color-accent, 0.06);
+      color: $color-accent;
+    }
+
+    &--active {
+      background: $color-accent;
+      color: white;
+      font-weight: $font-weight-bold;
+      border-color: $color-accent;
+      box-shadow: 0 2px 8px rgba($color-accent, 0.25);
+
+      &:hover {
+        background: $color-accent;
+        color: white;
+      }
+    }
+  }
+
+  &__dots {
+    color: $color-gray-400;
+    padding: 0 $space-1;
+    font-size: $font-size-sm;
+  }
+}
+
+.showingNote {
+  text-align: center;
+  font-size: $font-size-xs;
+  color: $color-gray-400;
+  padding: $space-2 0 $space-6;
+}
