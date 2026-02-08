@@ -10,7 +10,9 @@ import {
 import CATEGORIES from '@data/categories';
 import CATALOG, { getProductsByCategory } from '@data/catalog';
 import { useStore } from '@context/StoreContext';
+import { parsePrice, calculateDiscount as calcDiscount } from '@utils/pricing';
 import Badge from '@components/ui/Badge';
+import ProductImage from '@components/ui/ProductImage';
 import ProductModal from '@components/ProductModal';
 import styles from './Products.module.scss';
 
@@ -52,7 +54,7 @@ const Products = ({ initialBadgeFilter = 'all', pageHeading } = {}) => {
   const [priceRange, setPriceRange] = useState('all');
   const [badgeFilter, setBadgeFilter] = useState(initialBadgeFilter);
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 20;
+  const ITEMS_PER_PAGE = 12;
 
   const { addToCart, toggleWishlist, isWishlisted } = useStore();
 
@@ -494,7 +496,7 @@ const ProductCard = ({ product, index, onViewDetails, addToCart, toggleWishlist,
   );
 
   const wishlisted = isWishlisted(product.id);
-  const discount = calcDiscount(product);
+  const discount = calcDiscount(product, 0);
 
   return (
     <motion.article
@@ -506,12 +508,11 @@ const ProductCard = ({ product, index, onViewDetails, addToCart, toggleWishlist,
       transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.5) }}
     >
       <div className={styles.cardImageArea} onClick={onViewDetails}>
-        <img
-          src={product.image?.startsWith('http') ? product.image : `${BASE}${(product.image || '').replace(/^\//, '')}`}
+        <ProductImage
+          src={product.image}
           alt={product.name}
           className={styles.cardImage}
-          loading="lazy"
-          onError={(e) => { e.target.style.display = 'none'; }}
+          accentColor={product.colors?.[0]?.hex}
         />
         {product.badge && (
           <div className={styles.cardBadge}>
@@ -561,16 +562,5 @@ const ProductCard = ({ product, index, onViewDetails, addToCart, toggleWishlist,
     </motion.article>
   );
 };
-
-function parsePrice(str) {
-  return parseFloat((str || '0').replace(/[^0-9.]/g, '')) || 0;
-}
-
-function calcDiscount(product) {
-  const price = parsePrice(product.price);
-  const original = parsePrice(product.originalPrice);
-  if (!original || original <= price) return 0;
-  return Math.round(((original - price) / original) * 100);
-}
 
 export default Products;

@@ -5,45 +5,14 @@ import {
   CircleCheck, Sparkles,
 } from 'lucide-react';
 import { useStore } from '@context/StoreContext';
+import { hexAlpha } from '@utils/color';
+import { calculateDiscount } from '@utils/pricing';
+import { overlayVariants, modalVariants, staggerContainer, fadeUp } from '@utils/animations';
 import Badge from '@components/ui/Badge';
 import Button from '@components/ui/Button';
 import styles from './ProductModal.module.scss';
 
 const BASE = import.meta.env.BASE_URL;
-
-const hexAlpha = (hex, alpha) =>
-  `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
-
-const overlayVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.3 } },
-  exit: { opacity: 0, transition: { duration: 0.25 } },
-};
-
-const modalVariants = {
-  hidden: { opacity: 0, scale: 0.92, y: 30 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.95,
-    y: 20,
-    transition: { duration: 0.25 },
-  },
-};
-
-const staggerContainer = {
-  visible: { transition: { staggerChildren: 0.05, delayChildren: 0.15 } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
-};
 
 const ProductModal = ({ product, isOpen, onClose }) => {
   const [selectedColor, setSelectedColor] = useState(0);
@@ -326,14 +295,5 @@ const ProductModal = ({ product, isOpen, onClose }) => {
     </AnimatePresence>
   );
 };
-
-function calculateDiscount(slide, variantIndex = 0) {
-  const variant = slide.variants?.[variantIndex];
-  const priceStr = variant?.price || slide.price;
-  const originalStr = variant?.originalPrice || slide.originalPrice;
-  const price = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
-  const original = parseFloat(originalStr.replace(/[^0-9.]/g, ''));
-  return Math.round(((original - price) / original) * 100);
-}
 
 export default ProductModal;

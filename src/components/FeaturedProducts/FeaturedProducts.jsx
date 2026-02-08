@@ -5,14 +5,13 @@ import {
 } from 'lucide-react';
 import { NEW_ARRIVALS } from '@data/navigation';
 import { useStore } from '@context/StoreContext';
+import { hexAlpha } from '@utils/color';
+import { calculateDiscount } from '@utils/pricing';
 import Badge from '@components/ui/Badge';
 import ProductModal from '@components/ProductModal';
 import styles from './FeaturedProducts.module.scss';
 
 const BASE = import.meta.env.BASE_URL;
-
-const hexAlpha = (hex, alpha) =>
-  `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
 
 const FeaturedProducts = () => {
   const [modalProduct, setModalProduct] = useState(null);
@@ -145,6 +144,7 @@ const ProductCard = ({
           src={product.image?.startsWith('http') ? product.image : `${BASE}${product.image.replace(/^\//, '')}`}
           alt={product.title}
           className={styles.cardImage}
+          loading="lazy"
           whileHover={{ scale: 1.06, y: -8 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         />
@@ -237,11 +237,5 @@ const ProductCard = ({
     </motion.article>
   );
 };
-
-function calculateDiscount(product) {
-  const price = parseFloat(product.price.replace(/[^0-9.]/g, ''));
-  const original = parseFloat(product.originalPrice.replace(/[^0-9.]/g, ''));
-  return Math.round(((original - price) / original) * 100);
-}
 
 export default FeaturedProducts;

@@ -97,6 +97,9 @@ const Categories = () => {
     // Start after initial animations
     const startDelay = setTimeout(() => {
       intervalId = setInterval(() => {
+        // Pause when tab is not visible
+        if (document.hidden) return;
+
         setState(current => {
           const { positions, emptyPos, cooldownList } = current;
 
@@ -158,7 +161,7 @@ const Categories = () => {
             cooldownList: newCooldownList,
           };
         });
-      }, 4000); // Every 4 seconds
+      }, 6000); // Every 6 seconds
     }, 2000);
 
     return () => {

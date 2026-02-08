@@ -373,7 +373,26 @@
     transform-style: preserve-3d;
 
     @include respond-below(lg) {
+      perspective: none;
+      transform-style: flat;
+      padding: $space-4 0;
+      min-height: 240px;
+    }
+  }
+
+  // Hide decorative elements on mobile
+  &__productGlow,
+  &__productRing,
+  &__features {
+    @include respond-below(lg) {
       display: none;
+    }
+  }
+
+  &__productImage {
+    @include respond-below(lg) {
+      width: 200px;
+      height: 220px;
     }
   }
 

@@ -246,7 +246,10 @@
     svg { color: $color-accent; flex-shrink: 0; }
     strong { display: block; font-family: $font-display; font-size: $font-size-lg; font-weight: $font-weight-bold; color: $color-accent; line-height: 1; }
     small { display: block; font-size: $font-size-xs; color: $color-gray-500; margin-top: 2px; }
-    @media (max-width: $bp-sm) { left: $space-2; top: $space-4; padding: $space-2 $space-3; }
+    @media (max-width: $bp-sm) {
+      position: relative; top: auto; left: auto;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
   }
   &__float2 {
     position: absolute; bottom: $space-10; right: -$space-4;
@@ -258,7 +261,10 @@
     svg { color: $color-accent; flex-shrink: 0; }
     strong { display: block; font-size: $font-size-sm; font-weight: $font-weight-bold; color: white; }
     small { display: block; font-size: 10px; color: rgba(white, 0.4); margin-top: 2px; }
-    @media (max-width: $bp-sm) { right: $space-2; bottom: $space-6; }
+    @media (max-width: $bp-sm) {
+      position: relative; bottom: auto; right: auto;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
   }
 
   &__scroll {

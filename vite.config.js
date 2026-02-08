@@ -9,6 +9,16 @@ const srcPath = path.resolve(__dirname, './src');
 export default defineConfig({
   plugins: [react()],
   base: '/e-commerce/',
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          motion: ['framer-motion'],
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': srcPath,

@@ -140,12 +140,19 @@
 // ---- Grid Layout ----
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 220px repeat(3, 160px);
-  gap: $space-4;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 160px;
+  gap: $space-3;
   position: relative;
 
+  @include respond-to(sm) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 170px;
+    gap: $space-4;
+  }
+
   @include respond-to(md) {
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 260px repeat(3, 170px);
     gap: $space-5;
   }
@@ -181,6 +188,12 @@
   background: $color-surface;
   will-change: transform;
   z-index: 1;
+
+  // On mobile, override inline grid positioning — let cards flow naturally
+  @include respond-below(md) {
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
 
   // Glassmorphism border
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -287,6 +300,9 @@
 
   // Wide cards (positions 0 and 1)
   &--wide {
+    @include respond-below(md) {
+      grid-column: 1 / -1 !important;
+    }
     .cardName {
       font-size: $font-size-2xl;
       text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
@@ -457,6 +473,11 @@
 
 // ---- Empty Cell ----
 .emptyCell {
+  // Hide on mobile — puzzle animation doesn't work well on 2-col grid
+  @include respond-below(md) {
+    display: none !important;
+  }
+
   border-radius: $border-radius-2xl;
   background: linear-gradient(
     135deg,

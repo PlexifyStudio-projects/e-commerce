@@ -7,6 +7,10 @@ import {
 } from 'lucide-react';
 import { HERO_TABS } from '@data/navigation';
 import { useStore } from '@context/StoreContext';
+import { useMediaQuery } from '@hooks/useMediaQuery';
+import { hexAlpha } from '@utils/color';
+import { calculateDiscount } from '@utils/pricing';
+import { contentVariants, childVariants } from '@utils/animations';
 import Button from '@components/ui/Button';
 import Badge from '@components/ui/Badge';
 import ProductModal from '@components/ProductModal';
@@ -14,31 +18,6 @@ import styles from './Hero.module.scss';
 
 const AUTO_ROTATE_INTERVAL = 6000;
 const BASE = import.meta.env.BASE_URL;
-
-const hexAlpha = (hex, alpha) =>
-  `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
-
-const contentVariants = {
-  enter: { opacity: 0, y: 40, filter: 'blur(10px)' },
-  center: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94], staggerChildren: 0.06 },
-  },
-  exit: {
-    opacity: 0,
-    y: -30,
-    filter: 'blur(6px)',
-    transition: { duration: 0.35 },
-  },
-};
-
-const childVariants = {
-  enter: { opacity: 0, y: 25 },
-  center: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-  exit: { opacity: 0, y: -15 },
-};
 
 const TRUST_ITEMS = [
   { icon: Truck, label: 'Envio Gratis' },
@@ -55,6 +34,7 @@ const Hero = () => {
   const [addedToCart, setAddedToCart] = useState(false);
   const [modalProduct, setModalProduct] = useState(null);
   const { addToCart, toggleWishlist, isWishlisted } = useStore();
+  const isMobile = useMediaQuery('(max-width: 1023px)');
   const heroRef = useRef(null);
   const visualRef = useRef(null);
 
@@ -100,7 +80,7 @@ const Hero = () => {
   }, [isPaused, modalProduct, goNext]);
 
   const handleMouseMove = (e) => {
-    if (!visualRef.current) return;
+    if (isMobile || !visualRef.current) return;
     const rect = visualRef.current.getBoundingClientRect();
     mouseX.set(e.clientX - (rect.left + rect.width / 2));
     mouseY.set(e.clientY - (rect.top + rect.height / 2));
@@ -328,8 +308,9 @@ const Hero = () => {
                       src={`${BASE}${currentSlide.image.replace(/^\//, '')}`}
                       alt={currentSlide.title}
                       className={styles.hero__productImage}
-                      animate={{ y: [0, -14, 0] }}
-                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                      fetchpriority="high"
+                      animate={isMobile ? undefined : { y: [0, -14, 0] }}
+                      transition={isMobile ? undefined : { duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                     />
                   ) : (
                     <div className={styles.hero__productIcon}>
@@ -353,15 +334,7 @@ const Hero = () => {
                   ))}
                 </div>
 
-                {currentSlide.image && (
-                  <div className={styles.hero__productReflection}>
-                    <img
-                      src={`${BASE}${currentSlide.image.replace(/^\//, '')}`}
-                      alt=""
-                      aria-hidden="true"
-                    />
-                  </div>
-                )}
+                {/* Reflection removed for performance */}
               </motion.div>
             </motion.div>
           </AnimatePresence>
@@ -376,14 +349,5 @@ const Hero = () => {
     </section>
   );
 };
-
-function calculateDiscount(slide, variantIndex = 0) {
-  const variant = slide.variants?.[variantIndex];
-  const priceStr = variant?.price || slide.price;
-  const originalStr = variant?.originalPrice || slide.originalPrice;
-  const price = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
-  const original = parseFloat(originalStr.replace(/[^0-9.]/g, ''));
-  return Math.round(((original - price) / original) * 100);
-}
 
 export default Hero;

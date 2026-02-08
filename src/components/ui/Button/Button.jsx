@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import styles from './Button.module.scss';
 
 const Button = ({
@@ -28,27 +27,16 @@ const Button = ({
 
   if (href) {
     return (
-      <motion.a
-        href={href}
-        className={classes}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
-        {...props}
-      >
+      <a href={href} className={classes} {...props}>
         {content}
-      </motion.a>
+      </a>
     );
   }
 
   return (
-    <motion.button
-      className={classes}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      {...props}
-    >
+    <button className={classes} {...props}>
       {content}
-    </motion.button>
+    </button>
   );
 };
 

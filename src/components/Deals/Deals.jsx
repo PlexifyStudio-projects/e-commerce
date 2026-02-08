@@ -161,6 +161,7 @@ const DealCard = ({ deal, index, isInView }) => {
           src={deal.image?.startsWith('http') ? deal.image : `${BASE}${deal.image?.replace(/^\//, '')}`}
           alt={deal.title}
           className={styles.card__image}
+          loading="lazy"
         />
       </div>
 

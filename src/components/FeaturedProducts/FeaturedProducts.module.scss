@@ -67,6 +67,10 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  @include respond-to(md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   @include respond-to(lg) {
     grid-template-columns: repeat(4, 1fr);
     gap: $space-5;
@@ -230,6 +234,12 @@
     color: #EF4444;
     background: rgba(239, 68, 68, 0.08);
     border-color: rgba(239, 68, 68, 0.25);
+  }
+
+  // Always show on touch devices
+  @media (hover: none) {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

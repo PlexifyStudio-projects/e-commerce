@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
 import styles from './Brands.module.scss';
 
 const BRANDS = [
@@ -18,38 +16,24 @@ const BRANDS = [
 ];
 
 const Brands = () => {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-50px' });
-
   return (
-    <section className={styles.section} ref={sectionRef}>
+    <section className={styles.section}>
       <div className={styles.container}>
-        <motion.p
-          className={styles.title}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-        >
+        <p className={styles.title}>
           Marcas de confianza mundial
-        </motion.p>
+        </p>
 
         <div className={styles.marquee}>
           <div className={styles.marquee__track}>
             {[...BRANDS, ...BRANDS].map((brand, i) => (
-              <motion.div
-                key={`${brand.id}-${i}`}
-                className={styles.brand}
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : {}}
-                transition={{ duration: 0.5, delay: (i % BRANDS.length) * 0.05 }}
-              >
+              <div key={`${brand.id}-${i}`} className={styles.brand}>
                 <img
                   src={brand.logo}
                   alt={brand.name}
                   className={styles.brand__logo}
                   loading="lazy"
                 />
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
